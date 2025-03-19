@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de IMC</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Calculadora de IMC</h1>
+
+    <div class="container">
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" required>
+
+        <label for="peso">Peso (em kg):</label>
+        <input type="number" id="peso" name="peso" required>
+
+        <label for="altura">Altura (em metros):</label>
+        <input type="number" id="altura" name="altura" step="0.01" required>
+
+        <button onclick="calcularEExibirIMC()">Calcular</button>
+
+        <div id="resultado" class="hidden">
+            <h2>Resultado:</h2>
+            <p id="nomeResultado"></p>
+            <p id="imcResultado"></p>
+            <p id="avaliacaoResultado"></p>
+        </div>
+    </div>
+
+    <script>
+        class pessoa {
+            nome;
+            peso;
+            altura;
+
+            constructor(nome, peso, altura) {
+                this.nome = nome;
+                this.peso = peso;
+                this.altura = altura;
+            }
+
+            calcularImc() {
+                return this.peso / (this.altura * this.altura);
+            }
+
+            classificarImc() {
+                const imc = this.calcularImc();
+
+                if (imc <= 18.5) {
+                    return 'Abaixo do peso';
+                } else if (imc > 18.5 && imc <= 25) {
+                    return 'Peso normal';
+                } else if (imc > 25 && imc <= 30) {
+                    return 'Acima do peso';
+                } else if (imc > 30 && imc <= 40) {
+                    return 'Obeso';
+                } else {
+                    return 'Obesidade Grave';
+                }
+            }
+        }
+
+        function calcularEExibirIMC() {
+            const nomeInput = document.getElementById("nome");
+            const pesoInput = document.getElementById("peso");
+            const alturaInput = document.getElementById("altura");
+            const resultadoDiv = document.getElementById("resultado");
+            const nomeResultado = document.getElementById("nomeResultado");
+            const imcResultado = document.getElementById("imcResultado");
+            const avaliacaoResultado = document.getElementById("avaliacaoResultado");
+
+            const nome = nomeInput.value;
+            const peso = parseFloat(pesoInput.value);
+            const altura = parseFloat(alturaInput.value);
+
+            if (isNaN(peso) || isNaN(altura) || peso <= 0 || altura <= 0) {
+                alert("Por favor, insira peso e altura válidos.");
+                return;
+            }
+
+            const pessoaObj = new pessoa(nome, peso, altura);
+            const imc = pessoaObj.calcularImc();
+            const avaliacao = pessoaObj.classificarImc();
+
+            nomeResultado.textContent = `Nome: ${pessoaObj.nome}`;
+            imcResultado.textContent = `IMC: ${imc.toFixed(2)}`;
+            avaliacaoResultado.textContent = `Classificação: ${avaliacao}`;
+
+            resultadoDiv.classList.remove("hidden"); // Mostra a div de resultados
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            text-align: center;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: calc(100% - 12px);
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #resultado {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #e9ecef;
+            text-align: left;
+        }
+
+        #imcResultado, #avaliacaoResultado, #nomeResultado {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</body>
+</html>
